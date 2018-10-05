@@ -17,4 +17,10 @@ program
   .option('-r, --region <region>', 'The AWS region to use')
   .parse(process.argv);
 
-console.log(program.token);
+if (program.user && program.organization) {
+  throw new Error('Please specify GitHub user or organization, not both');
+}
+
+if (!program.region) {
+  throw new Error('No AWS region specified');
+}
