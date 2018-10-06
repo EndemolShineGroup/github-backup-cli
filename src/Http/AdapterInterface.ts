@@ -1,3 +1,3 @@
 export default interface AdapterInterface {
-  fetch(url: string, opts?: any): Promise<any>;
+  fetch<T extends any>(url: string, options?: any): Promise<T>;
 }

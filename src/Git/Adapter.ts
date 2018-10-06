@@ -1,48 +1,45 @@
-import { spawn } from 'promisify-child-process';
-
+import ShellAdapter from '../Shell/Adapter';
 import AdapterInterface from './AdapterInterface';
 
-export default class Adapter implements AdapterInterface {
+export default class Adapter extends ShellAdapter implements AdapterInterface {
   // async getConfig() {
   //
   // }
 
   async setConfig(key: string, value: string, global: boolean = false) {
-    const childProcess = spawn('git', [
+    const command = [
+      'git',
       'config',
       global ? '--global' : '',
       key,
       value,
-    ]);
+    ].join(' ');
 
-    childProcess.stderr.on('data', (data) => {
-      console.error(data);
-    });
+    const childProcess = this.spawn(command);
 
-    await childProcess;
+    const { stdout } = await childProcess;
+    // tslint:disable-next-line:no-console
+    console.log(stdout);
   }
 
   async clone(sourceRepository: string) {
-    const childProcess = spawn('git', ['clone', '--mirror', sourceRepository]);
+    const command = ['git', 'clone', '--mirror', sourceRepository].join(' ');
 
-    childProcess.stderr.on('data', (data) => {
-      console.error(data);
-    });
+    const childProcess = this.spawn(command);
 
-    await childProcess;
+    const { stdout } = await childProcess;
+    // tslint:disable-next-line:no-console
+    console.log(stdout);
   }
 
   async push(destinationRepository: string) {
-    const childProcess = spawn('git', [
-      'push',
-      '--mirror',
-      destinationRepository,
-    ]);
+    const command = ['git', 'push', '--mirror', destinationRepository].join(
+      ' ',
+    );
+    const childProcess = this.spawn(command);
 
-    childProcess.stderr.on('data', (data) => {
-      console.error(data);
-    });
-
-    await childProcess;
+    const { stdout } = await childProcess;
+    // tslint:disable-next-line:no-console
+    console.log(stdout);
   }
 }
