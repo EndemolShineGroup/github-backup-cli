@@ -2,7 +2,6 @@ import AdapterInterface from '../Git/AdapterInterface';
 import CodeCommit from './CodeCommit';
 
 describe('CodeCommit', () => {
-
   let adapter: AdapterInterface;
   let origin: CodeCommit;
   let region: string = 'us-east-1';
@@ -22,7 +21,9 @@ describe('CodeCommit', () => {
       const repoName = 'github-backup-cli';
       origin.push(repoName);
 
-      expect(adapter.push).toHaveBeenCalledWith(`https://git-codecommit.${region}.amazonaws.com/v1/repos/${repoName}`);
+      expect(adapter.push).toHaveBeenCalledWith(
+        `https://git-codecommit.${region}.amazonaws.com/v1/repos/${repoName}`,
+      );
     });
   });
 });

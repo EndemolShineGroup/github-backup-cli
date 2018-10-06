@@ -2,7 +2,6 @@ import AdapterInterface from '../Git/AdapterInterface';
 import DestinationOrigin from './DestinationOrigin';
 
 export default class CodeCommit implements DestinationOrigin {
-
   adapter: AdapterInterface;
   host: string;
 

@@ -9,7 +9,6 @@ export interface GitHubOptions {
 }
 
 export default class GitHub implements SourceOrigin {
-
   gitAdapter: GitAdapterInterface;
   httpAdapter: HttpAdapterInterface;
 
@@ -19,7 +18,11 @@ export default class GitHub implements SourceOrigin {
   userOrOrgName: string;
   token: string;
 
-  constructor(gitAdapter: GitAdapterInterface, httpAdapter: HttpAdapterInterface, options: GitHubOptions) {
+  constructor(
+    gitAdapter: GitAdapterInterface,
+    httpAdapter: HttpAdapterInterface,
+    options: GitHubOptions,
+  ) {
     this.gitAdapter = gitAdapter;
     this.httpAdapter = httpAdapter;
     this.isOrganization = options.isOrganization;
@@ -30,18 +33,21 @@ export default class GitHub implements SourceOrigin {
   list(): Promise<string> {
     const apiHost = this.host.replace('https://', 'https://api.');
 
-    const endpoint = this.isOrganization
-      ? 'orgs'
-      : 'users';
+    const endpoint = this.isOrganization ? 'orgs' : 'users';
 
-    return this.httpAdapter.fetch(`${apiHost}/${endpoint}/${this.userOrOrgName}`, {
-      headers: {
-        Authorization: `token ${this.token}`,
+    return this.httpAdapter.fetch(
+      `${apiHost}/${endpoint}/${this.userOrOrgName}`,
+      {
+        headers: {
+          Authorization: `token ${this.token}`,
+        },
       },
-    });
+    );
   }
 
   clone(repoName: string) {
-    return this.gitAdapter.clone(`${this.host}/${this.userOrOrgName}/${repoName}`);
+    return this.gitAdapter.clone(
+      `${this.host}/${this.userOrOrgName}/${repoName}`,
+    );
   }
 }
