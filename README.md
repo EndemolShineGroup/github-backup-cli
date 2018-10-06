@@ -1,5 +1,7 @@
 # @endemolshinegroup/github-backup-cli
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/EndemolShineGroup/github-backup-cli.svg)](https://greenkeeper.io/)
+
 [![MIT Licensed][icon-license]][link-license]
 [![NPM Version][icon-npm]][link-npm]
 [![Build Status][icon-ci]][link-ci]
