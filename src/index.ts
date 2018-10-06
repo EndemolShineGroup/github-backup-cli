@@ -6,8 +6,6 @@
 
 import program from 'commander';
 
-import { getOrganizationRepos, getUserRepos } from './lib/github';
-
 const pkg = require('../package.json');
 
 program
@@ -32,13 +30,3 @@ if (program.user && program.organization) {
 if (!program.region) {
   throw new Error('No AWS region specified');
 }
-
-const name = program.user ? program.user : program.organization;
-
-const getRepositories = program.user ? getUserRepos : getOrganizationRepos;
-
-getRepositories(name, program.token).then((repoList) => {
-  // repoList.forEach((repo: any) => {
-  //   console.log(repo.full_name);
-  // })
-});
