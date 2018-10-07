@@ -6,14 +6,19 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
   //
   // }
 
-  async setConfig(key: string, value: string) {
-    const command = ['git', 'config', key, `"${value}"`].join(' ');
+  currentDirectory: string;
 
-    const childProcess = this.exec(command);
+  get cwd(): string {
+    return this.currentDirectory;
+  }
 
-    const { stdout } = await childProcess;
-    // tslint:disable-next-line:no-console
-    console.log(stdout);
+  set cwd(cwd: string) {
+    this.currentDirectory = cwd;
+  }
+
+  constructor(exec: Function, spawn: Function, cwd: string = process.cwd()) {
+    super(exec, spawn);
+    this.currentDirectory = cwd;
   }
 
   async clone(sourceRepository: string) {
@@ -26,11 +31,21 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
     console.log(stdout);
   }
 
+  async setConfig(key: string, value: string) {
+    const command = ['git', 'config', key, `"${value}"`].join(' ');
+
+    const childProcess = this.exec(command, { cwd: this.cwd });
+
+    const { stdout } = await childProcess;
+    // tslint:disable-next-line:no-console
+    console.log(stdout);
+  }
+
   async push(destinationRepository: string) {
     const command = ['git', 'push', '--mirror', destinationRepository].join(
       ' ',
     );
-    const childProcess = this.exec(command);
+    const childProcess = this.exec(command, { cwd: this.cwd });
 
     const { stdout } = await childProcess;
     // tslint:disable-next-line:no-console

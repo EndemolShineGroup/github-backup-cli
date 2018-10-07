@@ -62,11 +62,18 @@ const runRepoTasks = async (repo: Repo) => {
   await gitAdapter.clone(repo.httpsUrl);
 
   const clonedPath = path.join(process.cwd(), `${repo.name}.git`);
+  gitAdapter.setCwd(clonedPath);
   const { stdout: lsOutput } = await shellAdapter.exec(`ls`, {
     cwd: clonedPath,
   });
   // tslint:disable-next-line:no-console
   console.log(lsOutput);
+
+  await gitAdapter.setConfig(
+    'credential.helper',
+    '!aws codecommit credential-helper $@',
+  );
+  await gitAdapter.setConfig('credential.UseHttpPath', 'true');
 };
 
 gitHubOrigin.list().then((repos) => {
