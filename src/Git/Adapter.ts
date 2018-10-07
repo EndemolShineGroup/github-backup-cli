@@ -32,7 +32,7 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
   }
 
   async setConfig(key: string, value: string) {
-    const command = ['git', 'config', key, `"${value}"`].join(' ');
+    const command = ['git', 'config', key, `'${value}'`].join(' ');
 
     const childProcess = this.exec(command, { cwd: this.cwd });
 

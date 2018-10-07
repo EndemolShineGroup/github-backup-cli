@@ -15,8 +15,8 @@ describe('Git\\Adapter', () => {
     adapter = new Adapter(execMock, spawnMock);
   });
 
-  describe('#setcwd', () => {
-    it('calls setcwd() correctly', () => {
+  describe('#cwd', () => {
+    it('set cwd correctly', () => {
       const path = '/tmp';
       adapter.cwd = path;
       expect(adapter.cwd).toEqual(path);
@@ -28,7 +28,7 @@ describe('Git\\Adapter', () => {
       const key = 'user.name';
       const value = 'John Doe';
       await adapter.setConfig(key, value);
-      expect(execMock).toHaveBeenCalledWith(`git config ${key} "${value}"`, {
+      expect(execMock).toHaveBeenCalledWith(`git config ${key} '${value}'`, {
         cwd: process.cwd(),
       });
     });
