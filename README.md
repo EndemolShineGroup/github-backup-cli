@@ -14,7 +14,8 @@
 [![Semantic Release][icon-semantic-release]][link-semantic-release]
 [![Prettier][icon-prettier]][link-prettier]
 
-A CLI tool to back up GitHub repositories. Currently only supports backing up to AWS CodeCommit.
+A CLI tool to back up GitHub repositories. Currently only supports backing up
+to AWS CodeCommit.
 
 ## Installation
 
