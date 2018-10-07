@@ -1,5 +1,4 @@
 import Adapter from './Adapter';
-import AdapterInterface from './AdapterInterface';
 
 describe('Git\\Adapter', () => {
   let adapter: Adapter;
@@ -25,10 +24,10 @@ describe('Git\\Adapter', () => {
   });
 
   describe('#setConfig', () => {
-    it('calls setConfig() correctly', () => {
+    it('calls setConfig() correctly', async () => {
       const key = 'user.name';
       const value = 'John Doe';
-      adapter.setConfig(key, value);
+      await adapter.setConfig(key, value);
       expect(execMock).toHaveBeenCalledWith(`git config ${key} "${value}"`, {
         cwd: process.cwd(),
       });
@@ -36,9 +35,9 @@ describe('Git\\Adapter', () => {
   });
 
   describe('#clone', () => {
-    it('calls clone() correctly', () => {
+    it('calls clone() correctly', async () => {
       const repoUrl = 'https://github.com/EndemolShineGroup/github-backup-cli';
-      adapter.clone(repoUrl);
+      await adapter.clone(repoUrl);
       expect(execMock).toHaveBeenCalledWith(
         `git clone --mirror ${repoUrl}`,
         undefined,
@@ -47,9 +46,9 @@ describe('Git\\Adapter', () => {
   });
 
   describe('#push', () => {
-    it('calls push() correctly', () => {
+    it('calls push() correctly', async () => {
       const repoUrl = 'https://github.com/EndemolShineGroup/github-backup-cli';
-      adapter.push(repoUrl);
+      await adapter.push(repoUrl);
       expect(execMock).toHaveBeenCalledWith(`git push --mirror ${repoUrl}`, {
         cwd: process.cwd(),
       });
