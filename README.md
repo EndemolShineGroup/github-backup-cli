@@ -20,7 +20,7 @@ to AWS CodeCommit.
 ## Installation
 
 ```bash
-yarn add @endemolshinegroup/github-backup-cli
+yarn global add @endemolshinegroup/github-backup-cli
 ```
 
 ## Usage
