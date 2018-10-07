@@ -62,7 +62,7 @@ const runRepoTasks = async (repo: Repo) => {
   await gitAdapter.clone(repo.httpsUrl);
 
   const clonedPath = path.join(process.cwd(), `${repo.name}.git`);
-  gitAdapter.setCwd(clonedPath);
+  gitAdapter.cwd = clonedPath;
   const { stdout: lsOutput } = await shellAdapter.exec(`ls`, {
     cwd: clonedPath,
   });
