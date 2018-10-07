@@ -19,9 +19,13 @@ export default class Adapter implements AdapterInterface {
     console.error(data);
   };
 
+  protected handleOutput = (data: any) => {
+    // tslint:disable-next-line:no-console
+    console.log(data);
+  };
+
   async exec(input: string, options?: ExecOptions) {
     const child = exec(input, options);
-    child.stderr.on('data', this.handleError);
     return child;
   }
 

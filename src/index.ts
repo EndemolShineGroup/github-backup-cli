@@ -4,7 +4,14 @@
  * Module dependencies.
  */
 
+import path from 'path';
+
+import Octokit from '@octokit/rest';
 import program from 'commander';
+
+import GitAdapter from './Git/Adapter';
+import GitHubOrigin, { Repo } from './Origins/GitHub';
+import ShellAdapter from './Shell/Adapter';
 
 const pkg = require('../package.json');
 
@@ -27,6 +34,41 @@ if (program.user && program.organization) {
   throw new Error('Please specify GitHub user or organization, not both');
 }
 
+if (!program.token) {
+  throw new Error('No GitHub token provided');
+}
+
 if (!program.region) {
   throw new Error('No AWS region specified');
 }
+
+const isOrganization: boolean = !!program.organization;
+
+const gitAdapter = new GitAdapter();
+const shellAdapter = new ShellAdapter();
+const octokit = new Octokit();
+octokit.authenticate({
+  token: program.token,
+  type: 'token',
+});
+
+const gitHubOrigin = new GitHubOrigin(octokit, {
+  isOrganization,
+  userOrOrgName: isOrganization ? program.organization : program.user,
+});
+
+const runRepoTasks = async (repo: Repo) => {
+  await gitAdapter.clone(repo.httpsUrl);
+
+  const clonedPath = path.join(process.cwd(), `${repo.name}.git`);
+  const { stdout: lsOutput } = await shellAdapter.exec(`ls`, {
+    cwd: clonedPath,
+  });
+  // tslint:disable-next-line:no-console
+  console.log(lsOutput);
+};
+
+gitHubOrigin.list().then((repos) => {
+  const firstRepo = repos[0];
+  return runRepoTasks(firstRepo);
+});

@@ -1,53 +1,53 @@
-import GitAdapterInterface from '../Git/AdapterInterface';
-import HttpAdapterInterface from '../Http/AdapterInterface';
+import Octokit from '@octokit/rest';
+
 import SourceOrigin from './SourceOrigin';
 
 export interface GitHubOptions {
   userOrOrgName: string;
   isOrganization: boolean;
-  token: string;
+}
+
+export interface Repo {
+  fullName: string;
+  name: string;
+  httpsUrl: string;
+  sshUrl: string;
 }
 
 export default class GitHub implements SourceOrigin {
-  gitAdapter: GitAdapterInterface;
-  httpAdapter: HttpAdapterInterface;
-
+  githubApi: Octokit;
   host: string = 'https://github.com';
-
   isOrganization: boolean;
   userOrOrgName: string;
-  token: string;
 
-  constructor(
-    gitAdapter: GitAdapterInterface,
-    httpAdapter: HttpAdapterInterface,
-    options: GitHubOptions,
-  ) {
-    this.gitAdapter = gitAdapter;
-    this.httpAdapter = httpAdapter;
+  constructor(githubApi: Octokit, options: GitHubOptions) {
+    this.githubApi = githubApi;
     this.isOrganization = options.isOrganization;
     this.userOrOrgName = options.userOrOrgName;
-    this.token = options.token;
   }
 
-  list(): Promise<string> {
-    const apiHost = this.host.replace('https://', 'https://api.');
+  async list(): Promise<Repo[]> {
+    const paginate = async (method: Function) => {
+      let response = await method({ per_page: 100 });
+      let { data } = response;
+      while (this.githubApi.hasNextPage(response)) {
+        response = await this.githubApi.getNextPage(response);
+        data = data.concat(response.data);
+      }
+      return data;
+    };
 
-    const endpoint = this.isOrganization ? 'orgs' : 'users';
+    const listReposResponse = await paginate(this.githubApi.repos.getAll);
 
-    return this.httpAdapter.fetch(
-      `${apiHost}/${endpoint}/${this.userOrOrgName}`,
-      {
-        headers: {
-          Authorization: `token ${this.token}`,
-        },
+    return listReposResponse.map(
+      (item: any): Repo => {
+        return {
+          name: item.name,
+          fullName: item.full_name,
+          httpsUrl: item.clone_url.replace('.git', ''),
+          sshUrl: item.ssh_url,
+        };
       },
-    );
-  }
-
-  clone(repoName: string) {
-    return this.gitAdapter.clone(
-      `${this.host}/${this.userOrOrgName}/${repoName}`,
     );
   }
 }

@@ -25,7 +25,7 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
   async clone(sourceRepository: string) {
     const command = ['git', 'clone', '--mirror', sourceRepository].join(' ');
 
-    const childProcess = this.spawn(command);
+    const childProcess = this.exec(command);
 
     const { stdout } = await childProcess;
     // tslint:disable-next-line:no-console

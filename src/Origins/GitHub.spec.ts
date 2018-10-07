@@ -1,39 +1,40 @@
-import GitAdapterInterface from '../Git/AdapterInterface';
-import HttpAdapterInterface from '../Http/AdapterInterface';
+import Octokit from '@octokit/rest';
+
 import GitHub from './GitHub';
 
 const ORG_NAME = '@endemolshinegroup';
 
 describe('GitHub', () => {
-  let gitAdapter: GitAdapterInterface;
-  let httpAdapter: HttpAdapterInterface;
+  let octokit: Octokit;
   let origin: GitHub;
 
   beforeEach(() => {
-    gitAdapter = {
-      setConfig: jest.fn(),
-
-      clone: jest.fn(),
-      push: jest.fn(),
+    octokit = {
+      getNextPage: jest.fn(),
+      hasNextPage: jest.fn(() => {
+        return false;
+      }),
+      // @ts-ignore,
+      repos: {
+        getAll: jest.fn(() => {
+          return {
+            data: [],
+          };
+        }),
+      },
     };
-    httpAdapter = {
-      fetch: jest.fn(),
-    };
-    origin = new GitHub(gitAdapter, httpAdapter, {
-      userOrOrgName: ORG_NAME,
+    origin = new GitHub(octokit, {
       isOrganization: true,
-      token: '123',
+      userOrOrgName: ORG_NAME,
     });
   });
 
-  describe('#push', () => {
-    it('calls the Git Adapter correctly', () => {
-      const repoName = 'github-backup-cli';
-      origin.clone(repoName);
+  describe('#list', () => {
+    it('calls Octokit correctly', async () => {
+      // const repoName = 'github-backup-cli';
+      await origin.list();
 
-      expect(gitAdapter.clone).toHaveBeenCalledWith(
-        `https://github.com/${ORG_NAME}/${repoName}`,
-      );
+      expect(octokit.repos.getAll).toHaveBeenCalledWith({ per_page: 100 });
     });
   });
 });
