@@ -8,6 +8,7 @@ import path from 'path';
 
 import Octokit from '@octokit/rest';
 import program from 'commander';
+import { exec, spawn } from 'promisify-child-process';
 
 import GitAdapter from './Git/Adapter';
 import GitHubOrigin, { Repo } from './Origins/GitHub';
@@ -44,8 +45,8 @@ if (!program.region) {
 
 const isOrganization: boolean = !!program.organization;
 
-const gitAdapter = new GitAdapter();
-const shellAdapter = new ShellAdapter();
+const gitAdapter = new GitAdapter(exec, spawn);
+const shellAdapter = new ShellAdapter(exec, spawn);
 const octokit = new Octokit();
 octokit.authenticate({
   token: program.token,

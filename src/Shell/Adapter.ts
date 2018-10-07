@@ -1,10 +1,17 @@
 import { ExecOptions, SpawnOptions } from 'child_process';
-import { exec, spawn } from 'promisify-child-process';
 
 import AdapterInterface from './AdapterInterface';
 
 export default class Adapter implements AdapterInterface {
-  protected parseInput(input: string) {
+  execFunc: Function;
+  spawnFunc: Function;
+
+  constructor(execFunc: Function, spawnFunc: Function) {
+    this.execFunc = execFunc;
+    this.spawnFunc = spawnFunc;
+  }
+
+  protected static parseInput(input: string) {
     const args = input.split(' ');
     const command = args.shift() as string;
 
@@ -14,26 +21,13 @@ export default class Adapter implements AdapterInterface {
     };
   }
 
-  protected handleError = (data: any) => {
-    // tslint:disable-next-line:no-console
-    console.error(data);
-  };
-
-  protected handleOutput = (data: any) => {
-    // tslint:disable-next-line:no-console
-    console.log(data);
-  };
-
   async exec(input: string, options?: ExecOptions) {
-    const child = exec(input, options);
-    return child;
+    return this.execFunc(input, options);
   }
 
   async spawn(input: string, options?: SpawnOptions) {
-    const { command, args } = this.parseInput(input);
+    const { command, args } = Adapter.parseInput(input);
 
-    const child = spawn(command, args, options);
-    child.stderr.on('data', this.handleError);
-    return child;
+    return this.spawnFunc(command, args, options);
   }
 }
