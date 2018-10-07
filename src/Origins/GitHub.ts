@@ -1,24 +1,20 @@
 import Octokit from '@octokit/rest';
+import debug from 'debug';
 
+import { Repo } from '../types';
 import SourceOrigin from './SourceOrigin';
+
+const log = debug('github-backup-cli:github');
 
 export interface GitHubOptions {
   userOrOrgName: string;
   isOrganization: boolean;
 }
 
-export interface Repo {
-  fullName: string;
-  name: string;
-  httpsUrl: string;
-  sshUrl: string;
-}
-
 export default class GitHub implements SourceOrigin {
-  githubApi: Octokit;
-  host: string = 'https://github.com';
-  isOrganization: boolean;
-  userOrOrgName: string;
+  protected githubApi: Octokit;
+  protected isOrganization: boolean;
+  protected userOrOrgName: string;
 
   constructor(githubApi: Octokit, options: GitHubOptions) {
     this.githubApi = githubApi;
@@ -37,14 +33,16 @@ export default class GitHub implements SourceOrigin {
       return data;
     };
 
+    log('Retrieving repositories from GitHub...');
     const listReposResponse = await paginate(this.githubApi.repos.getAll);
+    log(`${listReposResponse.length} repositories found`);
 
     return listReposResponse.map(
       (item: any): Repo => {
         return {
-          name: item.name,
           fullName: item.full_name,
           httpsUrl: item.clone_url.replace('.git', ''),
+          name: item.name,
           sshUrl: item.ssh_url,
         };
       },

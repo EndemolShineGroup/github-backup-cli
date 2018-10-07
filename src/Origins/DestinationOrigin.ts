@@ -1,3 +1,6 @@
+import { Repo } from '../types';
+
 export default interface DestinationOrigin {
-  push(repoName: string): void;
+  create(repoName: string): Promise<Repo>;
+  get(repoName: string): Promise<Repo>;
 }

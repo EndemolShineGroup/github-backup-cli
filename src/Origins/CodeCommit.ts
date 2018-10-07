@@ -1,16 +1,54 @@
-import AdapterInterface from '../Git/AdapterInterface';
+import CodeCommitSDK, { RepositoryMetadata } from 'aws-sdk/clients/codecommit';
+import debug from 'debug';
+
+import { Repo } from '../types';
 import DestinationOrigin from './DestinationOrigin';
 
-export default class CodeCommit implements DestinationOrigin {
-  adapter: AdapterInterface;
-  host: string;
+const log = debug('github-backup-cli:codecommit');
 
-  constructor(adapter: AdapterInterface, region: string) {
-    this.adapter = adapter;
-    this.host = `https://git-codecommit.${region}.amazonaws.com/v1/repos`;
+export default class CodeCommit implements DestinationOrigin {
+  protected codeCommitSDK: CodeCommitSDK;
+
+  constructor(region: string, codeCommitSDK?: CodeCommitSDK) {
+    this.codeCommitSDK = codeCommitSDK || new CodeCommitSDK({ region });
   }
 
-  push(repoName: string): void {
-    return this.adapter.push(`${this.host}/${repoName}`);
+  async create(repoName: string): Promise<Repo> {
+    log(`Creating repository ${repoName} on CodeCommit...`);
+    const response = await this.codeCommitSDK
+      .createRepository({
+        repositoryName: repoName,
+      })
+      .promise();
+
+    const repoData = response.repositoryMetadata as Required<
+      RepositoryMetadata
+    >;
+
+    return Promise.resolve(this.filterRepoData(repoData));
+  }
+
+  async get(repoName: string): Promise<Repo> {
+    log(`Retrieving repository ${repoName} from CodeCommit...`);
+    const response = await this.codeCommitSDK
+      .getRepository({
+        repositoryName: repoName,
+      })
+      .promise();
+
+    const repoData = response.repositoryMetadata as Required<
+      RepositoryMetadata
+    >;
+
+    return Promise.resolve(this.filterRepoData(repoData));
+  }
+
+  protected filterRepoData(repoData: Required<RepositoryMetadata>): Repo {
+    return {
+      fullName: repoData.repositoryName,
+      httpsUrl: repoData.cloneUrlHttp,
+      name: repoData.repositoryName,
+      sshUrl: repoData.cloneUrlSsh,
+    };
   }
 }

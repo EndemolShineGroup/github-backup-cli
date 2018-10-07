@@ -34,7 +34,9 @@
   "dependencies": {
     "@octokit/rest": "^15.13.0",
     "aws-sdk": "^2.329.0",
+    "cli-progress": "^2.1.0",
     "commander": "^2.18.0",
+    "debug": "^4.0.1",
     "isomorphic-fetch": "^2.2.1",
     "promisify-child-process": "^2.1.0"
   },
@@ -44,6 +46,8 @@
     "@commitlint/prompt": "^7",
     "@semantic-release/changelog": "^3",
     "@semantic-release/git": "^7",
+    "@types/cli-progress": "^1.8.0",
+    "@types/debug": "^0.0.31",
     "@types/isomorphic-fetch": "^0.0.34",
     "@types/jest": "^23",
     "@types/node": "^10",
