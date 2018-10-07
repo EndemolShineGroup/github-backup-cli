@@ -6,16 +6,10 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
   //
   // }
 
-  async setConfig(key: string, value: string, global: boolean = false) {
-    const command = [
-      'git',
-      'config',
-      global ? '--global' : '',
-      key,
-      value,
-    ].join(' ');
+  async setConfig(key: string, value: string) {
+    const command = ['git', 'config', key, `"${value}"`].join(' ');
 
-    const childProcess = this.spawn(command);
+    const childProcess = this.exec(command);
 
     const { stdout } = await childProcess;
     // tslint:disable-next-line:no-console
@@ -36,7 +30,7 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
     const command = ['git', 'push', '--mirror', destinationRepository].join(
       ' ',
     );
-    const childProcess = this.spawn(command);
+    const childProcess = this.exec(command);
 
     const { stdout } = await childProcess;
     // tslint:disable-next-line:no-console
