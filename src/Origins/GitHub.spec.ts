@@ -24,7 +24,6 @@ describe('GitHub', () => {
       },
     };
     origin = new GitHub(octokit, {
-      isOrganization: true,
       userOrOrgName: ORG_NAME,
     });
   });

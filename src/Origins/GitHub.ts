@@ -8,17 +8,14 @@ const log = debug('github-backup-cli:github');
 
 export interface GitHubOptions {
   userOrOrgName: string;
-  isOrganization: boolean;
 }
 
 export default class GitHub implements SourceOrigin {
   protected githubApi: Octokit;
-  protected isOrganization: boolean;
   protected userOrOrgName: string;
 
   constructor(githubApi: Octokit, options: GitHubOptions) {
     this.githubApi = githubApi;
-    this.isOrganization = options.isOrganization;
     this.userOrOrgName = options.userOrOrgName;
   }
 

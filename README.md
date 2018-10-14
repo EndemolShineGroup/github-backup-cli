@@ -26,7 +26,8 @@ yarn global add @endemolshinegroup/github-backup-cli
 ## Usage
 
 ```bash
-github-backup-cli --token <GH_TOKEN> --organization EndemolShineGroup --region us-east-1
+github-backup-cli list EndemolShineGroup --is-organization
+github-backup-cli backup EndemolShineGroup/github-backup-cli --region us-east-1
 ```
 
 [icon-license]: https://img.shields.io/github/license/EndemolShineGroup/github-backup-cli.svg?longCache=true&style=flat-square

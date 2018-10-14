@@ -28,7 +28,9 @@ export default class Adapter extends ShellAdapter implements AdapterInterface {
 
   async clone(sourceRepository: string, path?: string) {
     const command = ['git', 'clone', '--mirror', sourceRepository, path]
-      .filter((arg) => arg)
+      .filter((arg) => {
+        return arg;
+      })
       .join(' ');
     // log(`Cloning repo ${sourceRepository}...`);
 
