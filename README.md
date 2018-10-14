@@ -23,9 +23,10 @@ to AWS CodeCommit.
 yarn global add @endemolshinegroup/github-backup-cli
 ```
 
-## Usage
+## Usage 
 
 ```bash
+export GH_TOKEN=<token>
 github-backup-cli list EndemolShineGroup --is-organization
 github-backup-cli backup EndemolShineGroup/github-backup-cli --region us-east-1
 ```
