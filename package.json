@@ -24,9 +24,11 @@
   "scripts": {
     "commit": "git-cz",
     "build": "rimraf dist/ && tsc",
+    "build:docker": "docker build -t github-backup-cli . ",
     "build:docs": "rimraf docs/api && typedoc --out docs/api --target es6 --theme minimal --mode file src",
     "build:watch": "tsc --watch",
     "lint": "tslint -p tsconfig.json -t codeFrame 'src/**/*.ts' -e 'src/**/*.spec.ts'",
+    "run:docker": "docker run -it -e \"GH_TOKEN=${GH_TOKEN}\" github-backup-cli",
     "pretest": "rimraf coverage/",
     "test": "jest --no-cache",
     "semantic-release": "semantic-release"
@@ -45,6 +47,7 @@
     "@commitlint/prompt": "^7",
     "@endemolshinegroup/prettier-config": "^1.0.0",
     "@endemolshinegroup/tslint-config": "^1.0.2",
+    "@iteratec/semantic-release-docker": "^1.0.1",
     "@semantic-release/changelog": "^3",
     "@semantic-release/git": "^7",
     "@types/debug": "^0.0.31",

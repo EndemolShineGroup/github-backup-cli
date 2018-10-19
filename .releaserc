@@ -1,5 +1,6 @@
 {
   "verifyConditions": [
+    "@iteratec/semantic-release-docker",
     {
       "path": "@semantic-release/changelog",
       "changelogFile": "CHANGELOG.md"
@@ -8,6 +9,11 @@
     "@semantic-release/git"
   ],
   "prepare": [
+    {
+      "path": "@iteratec/semantic-release-docker",
+      "imageName": "github-backup-cli",
+      "repositoryName": "endemolshine"
+    },
     {
       "path": "@semantic-release/changelog",
       "changelogFile": "CHANGELOG.md"

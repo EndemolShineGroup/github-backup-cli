@@ -25,10 +25,19 @@ yarn global add @endemolshinegroup/github-backup-cli
 
 ## Usage 
 
+### Installing via NPM
+
 ```bash
-export GH_TOKEN=<token>
+export GH_TOKEN=123
 github-backup-cli list EndemolShineGroup --is-organization
 github-backup-cli backup EndemolShineGroup/github-backup-cli --region us-east-1
+```
+
+### Using the Docker image
+
+```bash
+export GH_TOKEN=123
+docker run -it -e "GH_TOKEN=${GH_TOKEN}" github-backup
 ```
 
 [icon-license]: https://img.shields.io/github/license/EndemolShineGroup/github-backup-cli.svg?longCache=true&style=flat-square
