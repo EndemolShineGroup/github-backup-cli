@@ -20,5 +20,10 @@
     },
     "@semantic-release/npm",
     "@semantic-release/git"
+  ],
+  "publish": [
+    {
+      "path": "@iteratec/semantic-release-docker"
+    }
   ]
 }
