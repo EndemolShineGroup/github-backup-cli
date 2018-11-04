@@ -3,16 +3,18 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
+    "importHelpers": true,
     "lib": [
       "dom",
       "es2015"
     ],
     "module": "commonjs",
     "outDir": "./dist",
+    "resolveJsonModule": true,
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
-    "target":"ES2018"
+    "target":"es2015"
   },
   "include": [
     "src/**/*.ts"

@@ -1,4 +1,4 @@
-# @endemolshinegroup/github-backup-cli
+![Banner][icon-banner]
 
 [![MIT Licensed][icon-license]][link-license]
 [![NPM Version][icon-npm]][link-npm]
@@ -39,6 +39,8 @@ github-backup-cli backup EndemolShineGroup/github-backup-cli --region us-east-1
 export GH_TOKEN=123
 docker run -it -e "GH_TOKEN=${GH_TOKEN}" github-backup
 ```
+
+[icon-banner]: docs/assets/banner.png
 
 [icon-license]: https://img.shields.io/github/license/EndemolShineGroup/github-backup-cli.svg?longCache=true&style=flat-square
 [link-license]: LICENSE
