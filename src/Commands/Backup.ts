@@ -40,13 +40,22 @@ export const handler = async (argv: Arguments) => {
   const codeCommitOrigin = new CodeCommitOrigin(region);
 
   // Check if repo exists on CodeCommit, if not, create it
-  let codeCommitRepo: Repo;
+  let codeCommitRepo!: Repo;
   try {
     codeCommitRepo = await codeCommitOrigin.get(repoName);
   } catch (error) {
     if (error.name === 'RepositoryDoesNotExistException') {
       codeCommitRepo = await codeCommitOrigin.create(repoName);
+      return;
     }
+
+    throw error;
+  }
+
+  if (!codeCommitRepo) {
+    throw new Error(
+      'There was an issue creating/retrieving the CodeCommit repo',
+    );
   }
 
   // Clone repo from GitHub to local filesystem
@@ -63,7 +72,7 @@ export const handler = async (argv: Arguments) => {
   await gitAdapter.setConfig('credential.UseHttpPath', 'true');
 
   // Push repo to CodeCommit
-  await gitAdapter.push(codeCommitRepo!.httpsUrl);
+  await gitAdapter.push(codeCommitRepo.httpsUrl);
 
   // Remove cloned repo (cleanup)
   rimraf.sync(localRepoPath);
