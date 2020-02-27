@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.13.0",
-    "aws-sdk": "^2.329.0",
+    "aws-sdk": "^2.626.0",
     "debug": "^4.0.1",
     "promisify-child-process": "^2.1.0",
     "rimraf": "^2",
